@@ -44,10 +44,6 @@ const validateBookUpdates = (updates: Book) => {
   return null;
 };
 
-
-
-
-
 //data connection
 let db: any;
 connectToDb((err: any) => {
@@ -175,11 +171,6 @@ app.get("/pg/books", async (req: Request, res: Response) => {
     }
   });
 
- 
-
-
-
-
   app.post("/pg/books", async (req: Request, res: Response) => {
     const book: Book = req.body;
     
@@ -241,3 +232,5 @@ app.get("/pg/books", async (req: Request, res: Response) => {
       res.status(500).json({ error: "Could not update the book" });
     }
   });
+
+  //hey
