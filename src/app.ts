@@ -14,6 +14,7 @@ interface Book {
   pages: number;
   rating: number;
   genre: string;
+  review?: string;
 }
 
 function isValidBook(book: Book): boolean {
