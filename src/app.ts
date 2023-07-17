@@ -145,12 +145,12 @@ app.patch("/books/:id", (req: Request, res: Response) => {
 
 
 app.get("/pg/books", async (req: Request, res: Response) => {
-    const page = req.query.page ? parseInt(req.query.page as string) : 1;
-    const limit = req.query.limit ? parseInt(req.query.limit as string) : 10;
+  const page = req.query.page ? parseInt(req.query.page as string) : 1;
+  const limit = req.query.limit ? parseInt(req.query.limit as string) : 3;
     try {
-        const offset = (page - 1) * limit;
-        const query = `SELECT * FROM books OFFSET ${offset} LIMIT ${limit}`;
-      const results = await PostgresClient.query('SELECT * FROM books');
+      const offset = (page - 1) * limit;
+      const query = `SELECT * FROM books OFFSET ${offset} LIMIT ${limit}`;
+      const results = await PostgresClient.query(query);
       return res.status(200).json(results.rows);
     } catch (error) {
       console.error(error);
