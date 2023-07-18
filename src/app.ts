@@ -57,16 +57,14 @@ connectToDb((err: any) => {
 });
 
 app.get("/books", (req: Request, res: Response) => {
-  //current
-
   const page = Number(req.query.p) || 0;
-  const bookPerPage = 3;
+  const limit = Number(req.query.limit) || 3; // Default page size is 3, can be changed via query parameter
   let books: any[] = [];
   db.collection("books")
     .find()
     .sort({ author: 1 })
-    .skip(page * bookPerPage)
-    .limit(bookPerPage)
+    .skip(page * limit)
+    .limit(limit)
     .forEach((book: any) => books.push(book))
     .then(() => {
       return res.status(200).json(books);
@@ -143,17 +141,17 @@ app.patch("/books/:id", (req: Request, res: Response) => {
 app.get("/pg/books", async (req: Request, res: Response) => {
   const page = req.query.page ? parseInt(req.query.page as string) : 1;
   const limit = req.query.limit ? parseInt(req.query.limit as string) : 3;
-    try {
-      const offset = (page - 1) * limit;
-      const query = `SELECT * FROM books OFFSET ${offset} LIMIT ${limit}`;
-      const results = await PostgresClient.query(query);
-      return res.status(200).json(results.rows);
-    } catch (error) {
-      console.error(error);
-      return res.status(500).json({ error: "Could not fetch documents" });
-    }
-  });
 
+  try {
+    const offset = (page - 1) * limit;
+    const query = `SELECT * FROM books OFFSET ${offset} LIMIT ${limit}`;
+    const results = await PostgresClient.query(query);
+    return res.status(200).json(results.rows);
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ error: "Could not fetch documents" });
+  }
+});
   app.get("/pg/books/:id", async (req: Request, res: Response) => {
     const id = req.params.id;
     try {
@@ -233,4 +231,4 @@ app.get("/pg/books", async (req: Request, res: Response) => {
     }
   });
 
-  //hey
+  //latest
